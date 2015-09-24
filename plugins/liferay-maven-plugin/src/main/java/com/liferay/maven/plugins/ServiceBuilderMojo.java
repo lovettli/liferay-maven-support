@@ -25,6 +25,7 @@ import java.net.URL;
 
 import java.util.List;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 
 /**
@@ -156,9 +157,16 @@ public class ServiceBuilderMojo extends AbstractToolsLiferayMojo {
 		args[27] =
 			"service.build.number.increment=" + serviceBuildNumberIncrement;
 
+		Dependency[] dependencies = {
+				createDependency("com.liferay",
+						"com.liferay.portal.tools.service.builder", "1.0.10",
+						"", "jar"),
+				createDependency("com.liferay", "org.freemarker",
+						"2.3.17.LIFERAY-PATCHED-1", "", "jar"), };
+
 		executeTool(
-			"com.liferay.portal.tools.servicebuilder.ServiceBuilder",
-			getProjectClassLoader(), args);
+				"com.liferay.portal.tools.service.builder.ServiceBuilder",
+				getToolsClassLoader(dependencies), args);
 
 		if (tempServiceFile != null) {
 			FileUtil.delete(tempServiceFile);
